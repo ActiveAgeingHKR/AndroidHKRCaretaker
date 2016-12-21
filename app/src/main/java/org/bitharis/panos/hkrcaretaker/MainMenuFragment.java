@@ -117,6 +117,7 @@ public class MainMenuFragment extends Fragment {
                         cfl.replaceFragment(new TaskListFragment());
                     }
                 }catch(Exception ex){
+                    Toast.makeText(getActivity(), "Ooops! this almost never happens!",Toast.LENGTH_LONG).show();
 
                 }
 
