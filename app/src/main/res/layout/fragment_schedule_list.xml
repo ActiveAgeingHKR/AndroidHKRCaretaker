@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.bitharis.panos.hkrcaretaker.MainActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Details"
+        android:id="@+id/scheduleDetailsButton"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:padding="4dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/schedule_list_item_customernameTextView"
+        android:layout_toLeftOf="@id/scheduleDetailsButton"
+        android:textStyle="bold"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:text="Customer Name"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/schedule_list_item_dateTextView"
+        android:layout_below="@id/schedule_list_item_customernameTextView"
+        android:layout_toLeftOf="@id/scheduleDetailsButton"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
+        android:text="Schedule Date"/>
+
+
+
+</RelativeLayout>
