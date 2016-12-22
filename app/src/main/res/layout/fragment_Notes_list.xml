@@ -1,0 +1,38 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.bitharis.panos.hkrcaretaker.MainActivity">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="View Details"
+        android:id="@+id/noteDetailsButton"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:padding="4dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/note_list_item_noteTitleTextView"
+        android:layout_toLeftOf="@id/noteDetailsButton"
+        android:textStyle="bold"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
+        android:text="Note Title"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/note_list_item_contentTextView"
+        android:layout_below="@id/note_list_item_noteTitleTextView"
+        android:layout_toLeftOf="@id/noteDetailsButton"
+        android:paddingLeft="4dp"
+        android:paddingTop="4dp"
+        android:text="note text"/>
+
+
+
+</RelativeLayout>

@@ -224,6 +224,28 @@ public class MainMenuFragment extends Fragment {
 
     }
 
+    private class getNotesByCustId extends AsyncTask<Void, Void, String> {
+        @Override
+        protected String doInBackground(Void... voids) {
+            String s="";
+            try {
+
+                s = MySingleton.getInstance(getContext()).doGetPlainText("notes/findtaskbyempid/"+MySingleton.getInstance(getContext()).employeeID);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return s;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
+
+    }
+
     private void StringParser(String string){
         System.out.println("Raw string "+string);
         string = string.replace("[","");

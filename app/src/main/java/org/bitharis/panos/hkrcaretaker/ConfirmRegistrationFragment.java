@@ -41,7 +41,7 @@ public class ConfirmRegistrationFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceSate) {
 
-
+        //String in index [0] contains the Fragment of origin. It should never be used to fill the forms
         params = this.getArguments().getStringArray(FIELDS);
         View view = inflater.inflate(R.layout.registration_form2, container, false);
 
@@ -86,12 +86,12 @@ public class ConfirmRegistrationFragment extends Fragment {
                             try {
                                 //if the username or email already exists modify the username by adding one more leter from the name
                                 //Possible outOfArrayException here in case of a small first name
-                                sUsername = params[0].substring(0, 4) + params[1].substring(0, 3);
+                                sUsername = params[1].substring(0, 4) + params[1].substring(0, 3);
                             }catch(Exception ex){
                                 //screw it, append a random number after the username.
-                                sUsername = params[0].substring(0, 3) + params[1].substring(0, 3)+number;
+                                sUsername = params[1].substring(0, 3) + params[1].substring(0, 3)+number;
                             }
-                            sEmail = params[0] + "." + params[1] + number+"@hkr.caretaker.com";
+                            sEmail = params[1] + "." + params[2] + number+"@hkr.caretaker.com";
                             uname.setText(sUsername);
                             email.setText(sEmail);
 
@@ -121,11 +121,11 @@ public class ConfirmRegistrationFragment extends Fragment {
     }
 
     private void fillRegistrationFields() {
-        sFname = params[0];
-        sLname = params[1];
-        sPhone = params[2];
-        sUsername = params[0].substring(0, 3) + params[1].substring(0, 3);
-        sEmail = params[0] + "." + params[1] + "@hkr.caretaker.com";
+        sFname = params[1];
+        sLname = params[2];
+        sPhone = params[3];
+        sUsername = params[1].substring(0, 3) + params[2].substring(0, 3);
+        sEmail = params[1] + "." + params[2] + "@hkr.caretaker.com";
 
     }
 

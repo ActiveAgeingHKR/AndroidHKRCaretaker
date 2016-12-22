@@ -53,6 +53,39 @@
         android:hint="cutomer @string/app_name"
         android:layout_marginTop="10dp"
         android:textSize="18sp" />
+    <TextView
+        android:text="From"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/schfrom_txt"
+        android:hint="09:00"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp" />
+
+    <TextView
+        android:text="Until"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5"
+        android:textSize="24sp"
+        android:layout_marginTop="30dp"
+        style="?android:listSeparatorTextViewStyle"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/schuntil_txt"
+        android:hint="cutomer @string/app_name"
+        android:layout_marginTop="10dp"
+        android:textSize="18sp" />
 
 
 

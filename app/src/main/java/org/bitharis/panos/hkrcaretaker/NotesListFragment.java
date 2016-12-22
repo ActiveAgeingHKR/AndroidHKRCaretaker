@@ -8,10 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.EmployeeSchedule;
-
 import java.util.LinkedList;
+import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Notes;
 
 /**
  * Created by panos on 12/21/2016.
@@ -20,51 +18,51 @@ import java.util.LinkedList;
 public class NotesListFragment extends ListFragment {
 
 
-    private LinkedList<EmployeeSchedule> employeeSchedules;
+    private LinkedList<Notes> employeesNotes;
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        getActivity().setTitle(R.string.schedule_title);
+        getActivity().setTitle("Your Notes");
 
-        employeeSchedules = new LinkedList<>();
-        while(MySingleton.getInstance(getContext()).employeeSchedule.size()>0){
-            this.employeeSchedules.offer(MySingleton.getInstance(getContext()).employeeSchedule.poll());
+        employeesNotes = new LinkedList<>();
+        while(MySingleton.getInstance(getContext()).employeeNotes.size()>0){
+            this.employeesNotes.offer(MySingleton.getInstance(getContext()).employeeNotes.poll());
         }
-        ScheduleAdapter adapter = new ScheduleAdapter(employeeSchedules);
+        NotesAdapter adapter = new NotesAdapter(employeesNotes);
         setListAdapter(adapter);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id){
-        EmployeeSchedule es = ((ScheduleAdapter)getListAdapter()).getItem(position);
+        Notes es = ((NotesAdapter)getListAdapter()).getItem(position);
 
 
     }
 
-    class ScheduleAdapter extends ArrayAdapter<EmployeeSchedule>{
+    class NotesAdapter extends ArrayAdapter<Notes>{
 
-        public ScheduleAdapter(LinkedList<EmployeeSchedule> schedules) {
-            super(getActivity(),0,schedules);
+        public NotesAdapter(LinkedList<Notes> notes) {
+            super(getActivity(),0,notes);
 
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent){
             if(convertView == null){
-                convertView = getActivity().getLayoutInflater().inflate(R.layout.fragment_schedule_list,null);
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.fragment_notes_list,null);
             }
 
-            EmployeeSchedule es = getItem(position);
+            Notes es = getItem(position);
 
-            TextView customerName =
-                    (TextView) convertView.findViewById(R.id.schedule_list_item_customernameTextView);
-            customerName.setText(es.getCustomersCuId().getCuLastname()+" "+es.getCustomersCuId().getCuFirstname());
+            TextView noteTitle =
+                    (TextView) convertView.findViewById(R.id.note_list_item_noteTitleTextView);
+            noteTitle.setText(es.getNoteTitle());
 
             TextView dateTextView =
-                    (TextView) convertView.findViewById(R.id.schedule_list_item_dateTextView);
-            dateTextView.setText(es.getSchDate());
-            Button detailsButton =(Button) convertView.findViewById(R.id.scheduleDetailsButton);
+                    (TextView) convertView.findViewById(R.id.note_list_item_contentTextView);
+            dateTextView.setText(es.getContent().substring(0,25));
+            Button detailsButton =(Button) convertView.findViewById(R.id.noteDetailsButton);
             detailsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -28,7 +28,7 @@ public class RegistrationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceSate) {
         View view = inflater.inflate(R.layout.registration_form, container, false);
         initializeViews(view);
-        final String[] params = new String[3];
+        final String[] params = new String[4];
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,32 +36,34 @@ public class RegistrationFragment extends Fragment {
                 int validityFlag=0;
                 FieldChecker fc = new FieldChecker();
 
+                //This is used in MainActivity to identify the Fragment origin of the parameters
+                params[0] = "ConfirmRegistrationFragment";
+
+                validityFlag++;
                 if(fc.checkNameTypeStrings(fname.getText().toString())){
-                    params[0] = fname.getText().toString();
+                    params[1] = fname.getText().toString();
                     validityFlag++;
                 }else{
                     Toast.makeText(getActivity(), "The field cannot be blank",Toast.LENGTH_LONG).show();
                 }
                 if(fc.checkNameTypeStrings(lname.getText().toString())){
-                    params[1] = lname.getText().toString();
+                    params[2] = lname.getText().toString();
                     validityFlag++;
                 }else{
                     Toast.makeText(getActivity(), "The field cannot be blank",Toast.LENGTH_LONG).show();
                 }
                 if(fc.checkPhoneTypeStrings(phone.getText().toString())){
-                    params[2] = phone.getText().toString();
+                    params[3] = phone.getText().toString();
                     validityFlag++;
                 }else{
                     Toast.makeText(getActivity(), "The field cannot be blank",Toast.LENGTH_LONG).show();
                 }
 
-                if(validityFlag==3){
+                if(validityFlag==4){
                     System.out.println(params[0]+" "+params[1]+" "+params[2]);
                     validityFlag=0;
                     cfl.passStrings(params);
                 }
-
-
             }
         });
 

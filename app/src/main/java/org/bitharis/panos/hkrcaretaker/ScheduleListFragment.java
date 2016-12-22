@@ -1,6 +1,6 @@
 package org.bitharis.panos.hkrcaretaker;
 
-import android.content.Context;
+
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -11,10 +11,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.EmployeeSchedule;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by panos on 12/21/2016.
@@ -53,7 +50,7 @@ public class ScheduleListFragment extends ListFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent){
+        public View getView(final int position, View convertView, ViewGroup parent){
             if(convertView == null){
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.fragment_schedule_list,null);
             }
@@ -74,6 +71,17 @@ public class ScheduleListFragment extends ListFragment {
                     FragmentCommunicator fc = (FragmentCommunicator) getContext();
                     System.out.println("Button pressed");
                     // LOAD the new fragment
+                    FragmentCommunicator cfl = (FragmentCommunicator) getContext();
+
+                    String custname = employeeSchedules.get(position).getCustomersCuId().getCuLastname();
+                    custname = custname +" "+employeeSchedules.get(position).getCustomersCuId().getCuFirstname();
+                    String date = employeeSchedules.get(position).getSchDate();
+                    String address = employeeSchedules.get(position).getCustomersCuId().getCuAddress();
+                    String from = employeeSchedules.get(position).getSchFromTime();
+                    String until = employeeSchedules.get(position).getSchUntilTime();
+                    String fragmentOrigin = "ScheduleDetailFragment";
+                    cfl.passStrings(fragmentOrigin,custname,address,date,from,until);
+                    cfl.replaceFragment(new SchedueDetailFragment());
                 }
             });
 

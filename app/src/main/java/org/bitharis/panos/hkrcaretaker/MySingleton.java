@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Base64;
 
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.EmployeeSchedule;
+import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Notes;
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Tasks;
 import org.json.JSONObject;
 import java.io.BufferedReader;
@@ -36,6 +37,7 @@ public class MySingleton {
     public static String employeeID;
     public static LinkedList<EmployeeSchedule> employeeSchedule = new LinkedList<>();
     public static LinkedList<Tasks> employeeTasks = new LinkedList<>();
+    public static LinkedList<Notes> employeeNotes = new LinkedList<>();
 
 
     private String endoding;

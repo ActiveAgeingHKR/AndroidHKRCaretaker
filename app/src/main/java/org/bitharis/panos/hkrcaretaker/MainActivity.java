@@ -34,48 +34,63 @@ public class MainActivity extends AppCompatActivity implements FragmentCommunica
     public void replaceFragment(Fragment f) {
 
         //gets a fragment and checks what kind of Fragment subclass is instance of
-        if (f instanceof MainMenuFragment) {
-            MainMenuFragment mmf = (MainMenuFragment) f;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frag_container, mmf);
-            ft.addToBackStack(null);
-            ft.commit();
-        } else if (f instanceof RegistrationFragment) {
-            RegistrationFragment rf = (RegistrationFragment) f;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frag_container, rf);
-            ft.addToBackStack(null);
-            ft.commit();
 
-        } else if(f instanceof ScheduleListFragment){
-            ScheduleListFragment slf = (ScheduleListFragment) f;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frag_container, slf);
-            ft.addToBackStack(null);
-            ft.commit();
-        }else if(f instanceof TaskListFragment){
-            TaskListFragment tlf = (TaskListFragment) f;
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.frag_container, tlf);
-            ft.addToBackStack(null);
-            ft.commit();
-        }
+            if (f instanceof MainMenuFragment ) {
 
+                MainMenuFragment mmf = (MainMenuFragment) f;
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.frag_container, mmf);
+                ft.addToBackStack(null);
+                ft.commit();
+            } else if (f instanceof RegistrationFragment) {
+                RegistrationFragment rf = (RegistrationFragment) f;
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.frag_container, rf);
+                ft.addToBackStack(null);
+                ft.commit();
+
+            } else if (f instanceof ScheduleListFragment) {
+                ScheduleListFragment slf = (ScheduleListFragment) f;
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.frag_container, slf);
+                ft.addToBackStack(null);
+                ft.commit();
+            } else if (f instanceof TaskListFragment) {
+                TaskListFragment tlf = (TaskListFragment) f;
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.frag_container, tlf);
+                ft.addToBackStack(null);
+                ft.commit();
+            }
     }
 
     @Override
     public void passStrings(String... params) {
 
         System.out.println("The first argument in params " + params[0]);
-        ConfirmRegistrationFragment confirmRegistrationFragment = new ConfirmRegistrationFragment();
-        Bundle args = new Bundle();
+        if(params[0].equalsIgnoreCase("ConfirmRegistrationFragment")){
+            ConfirmRegistrationFragment confirmRegistrationFragment = new ConfirmRegistrationFragment();
+            Bundle args = new Bundle();
+            args.putStringArray(confirmRegistrationFragment.FIELDS, params);
+            confirmRegistrationFragment.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frag_container, confirmRegistrationFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }else if(params[0].equalsIgnoreCase("ScheduleDetailFragment")){
+            SchedueDetailFragment schedueDetailFragment = new SchedueDetailFragment();
+            Bundle args = new Bundle();
+            args.putStringArray(SchedueDetailFragment.FIELDS, params);
+            schedueDetailFragment.setArguments(args);
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.frag_container, schedueDetailFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
 
-        args.putStringArray(confirmRegistrationFragment.FIELDS,params);
-        confirmRegistrationFragment.setArguments(args);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.frag_container, confirmRegistrationFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+
+
+
     }
 
 }
