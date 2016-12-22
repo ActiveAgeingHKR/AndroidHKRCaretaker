@@ -21,6 +21,7 @@ public class SchedueDetailFragment extends Fragment{
     private  String [] params;
     public final static String FIELDS = "org.bitharis.panos.hkrcaretaker";
     private TextView custName,address,schdate,from,until;
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceSate) {
         View view = inflater.inflate(R.layout.schedule_detail, container, false);
