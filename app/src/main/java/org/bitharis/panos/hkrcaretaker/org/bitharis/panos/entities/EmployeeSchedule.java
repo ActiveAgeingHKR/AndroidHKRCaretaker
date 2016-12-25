@@ -38,9 +38,10 @@ public class EmployeeSchedule implements Serializable {
         this.schId = schId;
     }
 
-    public EmployeeSchedule(String cuId, String cuLname, String cuFname, String cuAddress,
+    public EmployeeSchedule(String schId, String cuId, String cuLname, String cuFname, String cuAddress,
                             String schDate, String schFromTime, String schUntilTime, String emplVisitedCust) {
-
+        Integer si = new Integer(Integer.valueOf(schId));
+        this.schId = si;
         Integer i = new Integer(Integer.valueOf(cuId));
         this.customersCuId = new Customers(i);
         this.customersCuId.setCuLastname(cuLname);

@@ -1,14 +1,22 @@
 package org.bitharis.panos.hkrcaretaker;
 
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+
 
 public class MainActivity extends AppCompatActivity implements FragmentCommunicator {
 
 
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,10 +95,8 @@ public class MainActivity extends AppCompatActivity implements FragmentCommunica
             transaction.addToBackStack(null);
             transaction.commit();
         }
-
-
-
-
     }
+
+
 
 }

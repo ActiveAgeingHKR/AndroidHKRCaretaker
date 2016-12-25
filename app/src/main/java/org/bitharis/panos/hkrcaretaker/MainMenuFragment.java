@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -75,14 +76,14 @@ public class MainMenuFragment extends Fragment {
                 System.out.println("Schedule Button pressed");
                 getScheduleByEmpId gsi = new getScheduleByEmpId();
                 try {
-                    String result = gsi.execute().get();
-                    if(result.equals("[]")){
+                    boolean result = gsi.execute().get();
+                    if(!result){
                         //if the string that was returned from the query is only two sqauare brakets
                         //that measns that there is no schedule for the employee
                         Toast.makeText(getActivity(), "There is no shcedule available",Toast.LENGTH_LONG).show();
 
                     }else{
-                        StringParser(result);
+
                         cfl.replaceFragment(new ScheduleListFragment());
                     }
                 } catch (InterruptedException e) {
@@ -180,14 +181,45 @@ public class MainMenuFragment extends Fragment {
 
     }
 
-    private class getScheduleByEmpId extends AsyncTask<Void, Void, String> {
+    private class getScheduleByEmpId extends AsyncTask<Void, Void, Boolean> {
         @Override
-        protected String doInBackground(Void... voids) {
-            String s="";
+        protected Boolean doInBackground(Void... voids) {
+            Boolean s= Boolean.valueOf(false);
             try {
+                //check if we have already downloaded a schedule.
+                //if yes get the last our_schId and get check if there are any changes on the server.
+                //if there are changes downloaded all the schedules WHERE schId > our_scheduleId
 
-                s = MySingleton.getInstance(getContext()).doGetPlainText("employeeschedule/getempschedulebyempId/"+MySingleton.getInstance(getContext()).employeeID);
-                System.out.println("response "+s);
+                if(!MySingleton.getInstance(getContext()).employeeSchedule.isEmpty()){
+                    System.out.println("The employeeSchedule List is NOT EMPTY");
+                    EmployeeSchedule employeeSchedule = new EmployeeSchedule();
+                    employeeSchedule.setSchId(MySingleton.getInstance(getContext()).employeeSchedule.getLast().getSchId());
+                    int our_schId = employeeSchedule.getSchId().intValue();
+                    System.out.println("GET ALL THE SCHEDULE RECORDS THAT ARE LARGER THAN "+our_schId);
+                    String res  =MySingleton.getInstance(getContext()).doGetPlainText("employeeschedule/getschidlargerthan/"+our_schId+"&"+MySingleton.getInstance(getContext()).employeeID);
+                    System.out.println("response "+res);
+                    LinkedList<EmployeeSchedule> es = new LinkedList<>();
+                    if(!res.equals("[]")){
+                        es = StringParser(res);
+                        MySingleton.getInstance(getContext()).employeeSchedule.addAll(es);
+
+                    }
+                    s= Boolean.TRUE;
+
+
+
+                }else{
+                    System.out.println("The employeeSchedule List is EMPTY");
+                    String res = MySingleton.getInstance(getContext()).doGetPlainText("employeeschedule/getempschedulebyempId/"+MySingleton.getInstance(getContext()).employeeID);
+                    MySingleton.getInstance(getContext()).employeeSchedule = StringParser(res);
+                    System.out.println("response "+res);
+                    if(!MySingleton.getInstance(getContext()).employeeSchedule.isEmpty()){
+                        System.out.println("We have filled the employeeSchedule List");
+                        s = Boolean.TRUE;
+                    }
+                }
+
+
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -196,7 +228,7 @@ public class MainMenuFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(String result) {
+        protected void onPostExecute(Boolean result) {
             super.onPostExecute(result);
         }
 
@@ -246,7 +278,7 @@ public class MainMenuFragment extends Fragment {
 
     }
 
-    private void StringParser(String string){
+    private LinkedList<EmployeeSchedule> StringParser(String string){
         System.out.println("Raw string "+string);
         string = string.replace("[","");
         System.out.println("String after first replace() "+string);
@@ -254,14 +286,17 @@ public class MainMenuFragment extends Fragment {
         System.out.println("String after seconds replace() "+string);
         String[] employeeScheduleRecords = string.split(", ");
         System.out.println("Number of Records received: "+employeeScheduleRecords.length);
-
+        LinkedList<EmployeeSchedule> employeeScheduleLinkedList = new LinkedList<>();
 
         for(int i=0; i<employeeScheduleRecords.length; i++){
             String[] recordFields = employeeScheduleRecords[i].split(";");
+            System.out.println("Lentgh of recordFields = "+recordFields.length);
             EmployeeSchedule es = new EmployeeSchedule(recordFields[0],recordFields[1],recordFields[2],
-                    recordFields[3],recordFields[4],recordFields[5],recordFields[6],recordFields[7]);
-            MySingleton.getInstance(getContext()).employeeSchedule.offer(es);
+                    recordFields[3],recordFields[4],recordFields[5],recordFields[6],recordFields[7],recordFields[8]);
+            employeeScheduleLinkedList.offer(es);
         }
+
+        return employeeScheduleLinkedList;
 
     }
 }

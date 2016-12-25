@@ -83,7 +83,12 @@ public class MySingleton {
     }
 
 
-
+    /**
+     * Accepts a JSON string as a reply from server
+     * @param methodAddress
+     * @return
+     * @throws Exception
+     */
     public String doGetJsonString(String methodAddress) throws Exception {
 
         String usernamePassword = REST_SERVER_USERNAME+":"+REST_SERVER_PASSWORD;
@@ -112,10 +117,16 @@ public class MySingleton {
         in.close();
 
         //print result
-        System.out.println(response.toString());
+//        System.out.println(response.toString());
         return response.toString();
     }
 
+    /**
+     * Accepts a PLAIN_TEXT as a reply from server
+     * @param methodAddress
+     * @return
+     * @throws Exception
+     */
     public String doGetPlainText(String methodAddress) throws Exception {
 
         String usernamePassword = REST_SERVER_USERNAME+":"+REST_SERVER_PASSWORD;
@@ -142,20 +153,19 @@ public class MySingleton {
         in.close();
 
         //print result
-        System.out.println(response.toString());
+//        System.out.println(response.toString());
         return response.toString();
     }
 
 
     /** HTTP POST request
-     * Sends a HHTP POST taking a JSONstring as a parameter
+     * Sends a HTTP POST taking a JSONstring as a parameter
      * @param methodAddress
      * @param paramaeter
      * @return
      * @throws Exception
      * Suitable for calling POST methods on the server that create new objects and Consume JSON strings
      */
-
     public String sendPostJsonString(String methodAddress, String paramaeter) throws Exception {
 
 
