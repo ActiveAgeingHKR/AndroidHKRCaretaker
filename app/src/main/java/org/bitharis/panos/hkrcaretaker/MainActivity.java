@@ -5,11 +5,8 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 
 
 public class MainActivity extends AppCompatActivity implements FragmentCommunicator {
@@ -28,13 +25,10 @@ public class MainActivity extends AppCompatActivity implements FragmentCommunica
             if (savedInstanceState != null) {
                 return;
             }
-
-
             LoginFragment lgf = new LoginFragment();
             lgf.setArguments(getIntent().getExtras());
             getSupportFragmentManager().beginTransaction().add(R.id.frag_container, lgf).commit();
         }
-
 
     }
 
@@ -70,12 +64,19 @@ public class MainActivity extends AppCompatActivity implements FragmentCommunica
                 ft.addToBackStack(null);
                 ft.commit();
             }
+            else if (f instanceof ScheduleViewModeChooserDialog) {
+                System.out.println("Creating the ScheduleViewModeDialog Fragment");
+                ScheduleViewModeChooserDialog tlf = (ScheduleViewModeChooserDialog) f;
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                tlf.show(ft, "TAG");
+
+            }
     }
 
     @Override
     public void passStrings(String... params) {
 
-        System.out.println("The first argument in params " + params[0]);
+        //Here we check which Fragment should receive these params
         if(params[0].equalsIgnoreCase("ConfirmRegistrationFragment")){
             ConfirmRegistrationFragment confirmRegistrationFragment = new ConfirmRegistrationFragment();
             Bundle args = new Bundle();
@@ -86,14 +87,25 @@ public class MainActivity extends AppCompatActivity implements FragmentCommunica
             transaction.addToBackStack(null);
             transaction.commit();
         }else if(params[0].equalsIgnoreCase("ScheduleDetailFragment")){
-            SchedueDetailFragment schedueDetailFragment = new SchedueDetailFragment();
+            ScheduleDetailFragment scheduleDetailFragment = new ScheduleDetailFragment();
             Bundle args = new Bundle();
-            args.putStringArray(SchedueDetailFragment.FIELDS, params);
-            schedueDetailFragment.setArguments(args);
+            args.putStringArray(ScheduleDetailFragment.FIELDS, params);
+            scheduleDetailFragment.setArguments(args);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frag_container, schedueDetailFragment);
+            transaction.replace(R.id.frag_container, scheduleDetailFragment);
             transaction.addToBackStack(null);
             transaction.commit();
+        }else if(params[0].equalsIgnoreCase("ScheduleViewModeChooser")){
+            System.out.println("*************HELLO ********************************************");
+            System.out.println("Inside the method: "+params[0]+"   "+params[1]);
+            ScheduleListFragment scheduleListFragment = new ScheduleListFragment();
+            Bundle args = new Bundle();
+            args.putString(ScheduleListFragment.MODES,params[1]);
+            scheduleListFragment.setArguments(args);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frag_container,scheduleListFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
         }
     }
 

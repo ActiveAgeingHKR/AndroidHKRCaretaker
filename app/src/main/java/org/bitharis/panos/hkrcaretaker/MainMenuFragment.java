@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,28 +45,25 @@ public class MainMenuFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceSate) {
 
-
-
         View view = inflater.inflate(R.layout.main_menu, container, false);
-
         initializeViews(view);
-
-
 
         confBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                try {
-                    String s =  new getScheduleByDate().execute().get();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
-                Date cDate = new Date();
-                String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
 
-                System.out.println(fDate);
+//                try {
+//                   // String s =  new getScheduleByDate().execute().get();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                }
+//                Date cDate = new Date();
+//                String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
+//
+//                System.out.println(fDate);
+
 
             }
         });
@@ -73,24 +71,9 @@ public class MainMenuFragment extends Fragment {
         scheduleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("Schedule Button pressed");
-                getScheduleByEmpId gsi = new getScheduleByEmpId();
-                try {
-                    boolean result = gsi.execute().get();
-                    if(!result){
-                        //if the string that was returned from the query is only two sqauare brakets
-                        //that measns that there is no schedule for the employee
-                        Toast.makeText(getActivity(), "There is no shcedule available",Toast.LENGTH_LONG).show();
 
-                    }else{
-
-                        cfl.replaceFragment(new ScheduleListFragment());
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                }
+                //prompt the user to choose a View mode (Mothly , Weekly, Daily)
+                cfl.replaceFragment(new ScheduleViewModeChooserDialog());
             }
         });
 
@@ -100,26 +83,14 @@ public class MainMenuFragment extends Fragment {
                 System.out.println("Task Button pressed");
                 getTaskByEmpId gte = new getTaskByEmpId();
                 try{
-                    String result = gte.execute().get();
-                    if(result.equals("[]")){
+                    boolean result = gte.execute().get();
+                    if(!result){
                         Toast.makeText(getActivity(), "There are no tasks available",Toast.LENGTH_LONG).show();
                     }else{
-                        System.out.println("Inside the Listener");
-                        JSONArray jsonArray = new JSONArray(result);
-                        System.out.println(jsonArray);
-                        for(int i =0; i<jsonArray.length(); i++){
-                            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                            Gson gson = new Gson();
-                            Tasks t = new Tasks();
-                            t = gson.fromJson(jsonObject.toString(),Tasks.class);
-                            MySingleton.getInstance(getContext()).employeeTasks.offer(t);
-                        }
-
                         cfl.replaceFragment(new TaskListFragment());
                     }
                 }catch(Exception ex){
                     Toast.makeText(getActivity(), "Ooops! this almost never happens!",Toast.LENGTH_LONG).show();
-
                 }
 
             }
@@ -129,7 +100,6 @@ public class MainMenuFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 System.out.println("Notes Button pressed");
-
             }
         });
 
@@ -181,44 +151,50 @@ public class MainMenuFragment extends Fragment {
 
     }
 
-    private class getScheduleByEmpId extends AsyncTask<Void, Void, Boolean> {
+
+
+    private class getTaskByEmpId extends AsyncTask<Void, Void, Boolean> {
         @Override
         protected Boolean doInBackground(Void... voids) {
-            Boolean s= Boolean.valueOf(false);
+            Boolean s=Boolean.FALSE;
             try {
-                //check if we have already downloaded a schedule.
-                //if yes get the last our_schId and get check if there are any changes on the server.
-                //if there are changes downloaded all the schedules WHERE schId > our_scheduleId
+                if(!MySingleton.employeeTasks.isEmpty()){
+                    Tasks tasks = new Tasks();
+                    tasks.setTaskId(MySingleton.getInstance(getContext()).employeeTasks.getLast().getTaskId());
+                    int last_id_saved_on_phone = tasks.getTaskId();
+                    String result = MySingleton.getInstance(getContext()).doGetPlainText("tasks/getupdatedtasklist/"+MySingleton.getInstance(getContext()).employeeID
+                            +"&"+last_id_saved_on_phone);
 
-                if(!MySingleton.getInstance(getContext()).employeeSchedule.isEmpty()){
-                    System.out.println("The employeeSchedule List is NOT EMPTY");
-                    EmployeeSchedule employeeSchedule = new EmployeeSchedule();
-                    employeeSchedule.setSchId(MySingleton.getInstance(getContext()).employeeSchedule.getLast().getSchId());
-                    int our_schId = employeeSchedule.getSchId().intValue();
-                    System.out.println("GET ALL THE SCHEDULE RECORDS THAT ARE LARGER THAN "+our_schId);
-                    String res  =MySingleton.getInstance(getContext()).doGetPlainText("employeeschedule/getschidlargerthan/"+our_schId+"&"+MySingleton.getInstance(getContext()).employeeID);
-                    System.out.println("response "+res);
-                    LinkedList<EmployeeSchedule> es = new LinkedList<>();
-                    if(!res.equals("[]")){
-                        es = StringParser(res);
-                        MySingleton.getInstance(getContext()).employeeSchedule.addAll(es);
-
+                    if(!result.equals("[]")){
+                        JSONArray jsonArray = new JSONArray(result);
+                        System.out.println(jsonArray);
+                        for(int i =0; i<jsonArray.length(); i++){
+                            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                            Gson gson = new Gson();
+                            Tasks t;
+                            t = gson.fromJson(jsonObject.toString(),Tasks.class);
+                            MySingleton.getInstance(getContext()).employeeTasks.offer(t);
+                        }
                     }
-                    s= Boolean.TRUE;
-
-
+                    s = Boolean.TRUE;
 
                 }else{
-                    System.out.println("The employeeSchedule List is EMPTY");
-                    String res = MySingleton.getInstance(getContext()).doGetPlainText("employeeschedule/getempschedulebyempId/"+MySingleton.getInstance(getContext()).employeeID);
-                    MySingleton.getInstance(getContext()).employeeSchedule = StringParser(res);
-                    System.out.println("response "+res);
-                    if(!MySingleton.getInstance(getContext()).employeeSchedule.isEmpty()){
-                        System.out.println("We have filled the employeeSchedule List");
-                        s = Boolean.TRUE;
-                    }
-                }
+                    String result = MySingleton.getInstance(getContext()).doGetPlainText("tasks/findactivetasksbyempid/"+MySingleton.getInstance(getContext()).employeeID);
+                    if(!result.equals("[]")){
+                        JSONArray jsonArray = new JSONArray(result);
+                        System.out.println(jsonArray);
 
+                        for(int i =0; i<jsonArray.length(); i++){
+                            JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                            Gson gson = new Gson();
+                            Tasks t;
+                            t = gson.fromJson(jsonObject.toString(),Tasks.class);
+
+                            MySingleton.getInstance(getContext()).employeeTasks.offer(t);
+                        }
+                    }
+                    s = Boolean.TRUE;
+                }
 
 
             } catch (Exception e) {
@@ -229,28 +205,6 @@ public class MainMenuFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-        }
-
-    }
-
-    private class getTaskByEmpId extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... voids) {
-            String s="";
-            try {
-
-                s = MySingleton.getInstance(getContext()).doGetPlainText("tasks/findtaskbyempid/"+MySingleton.getInstance(getContext()).employeeID);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return s;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
             super.onPostExecute(result);
         }
 
@@ -278,25 +232,5 @@ public class MainMenuFragment extends Fragment {
 
     }
 
-    private LinkedList<EmployeeSchedule> StringParser(String string){
-        System.out.println("Raw string "+string);
-        string = string.replace("[","");
-        System.out.println("String after first replace() "+string);
-        string = string.replace("]","");
-        System.out.println("String after seconds replace() "+string);
-        String[] employeeScheduleRecords = string.split(", ");
-        System.out.println("Number of Records received: "+employeeScheduleRecords.length);
-        LinkedList<EmployeeSchedule> employeeScheduleLinkedList = new LinkedList<>();
 
-        for(int i=0; i<employeeScheduleRecords.length; i++){
-            String[] recordFields = employeeScheduleRecords[i].split(";");
-            System.out.println("Lentgh of recordFields = "+recordFields.length);
-            EmployeeSchedule es = new EmployeeSchedule(recordFields[0],recordFields[1],recordFields[2],
-                    recordFields[3],recordFields[4],recordFields[5],recordFields[6],recordFields[7],recordFields[8]);
-            employeeScheduleLinkedList.offer(es);
-        }
-
-        return employeeScheduleLinkedList;
-
-    }
 }

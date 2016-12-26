@@ -36,7 +36,7 @@ public class RegistrationFragment extends Fragment {
                 int validityFlag=0;
                 FieldChecker fc = new FieldChecker();
 
-                //This is used in MainActivity to identify the Fragment origin of the parameters
+                //This is used in MainActivity to identify the Fragment destination
                 params[0] = "ConfirmRegistrationFragment";
 
                 validityFlag++;

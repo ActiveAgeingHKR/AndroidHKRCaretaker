@@ -5,4 +5,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="schedule_title">Your Schedule</string>
     <string name="date_picker_title">Schedule Date</string>
+    <string-array name="schedule_view_modes">
+        <item>Monthly View</item>
+        <item>Weekly View</item>
+        <item>Daily View</item>
+    </string-array>
+    <string name="choose_schedule_view">Select View Mode</string>
 </resources>

@@ -15,7 +15,7 @@ import org.w3c.dom.Text;
  */
 
 
-public class SchedueDetailFragment extends Fragment{
+public class ScheduleDetailFragment extends Fragment{
 
     private FragmentCommunicator cfl;
     private  String [] params;
@@ -26,9 +26,9 @@ public class SchedueDetailFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceSate) {
         View view = inflater.inflate(R.layout.schedule_detail, container, false);
 
-        System.out.println("FIELDS--->"+FIELDS);
         //String in index [0] contains the Fragment of origin. It should never be used to fill the forms
         params = this.getArguments().getStringArray(FIELDS);
+
         custName = (TextView)view.findViewById(R.id.custname_txt);
         address = (TextView) view.findViewById(R.id.custadd_txt);
         schdate = (TextView) view.findViewById(R.id.schdate_txt);

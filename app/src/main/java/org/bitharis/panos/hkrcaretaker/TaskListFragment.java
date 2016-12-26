@@ -21,7 +21,7 @@ import java.util.LinkedList;
 public class TaskListFragment extends ListFragment {
 
 
-    private LinkedList<Tasks> employeeTasks;
+
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -29,11 +29,7 @@ public class TaskListFragment extends ListFragment {
 
         getActivity().setTitle("Your Tasks");
 
-        employeeTasks = new LinkedList<>();
-        while(MySingleton.getInstance(getContext()).employeeTasks.size()>0){
-            this.employeeTasks.offer(MySingleton.getInstance(getContext()).employeeTasks.poll());
-        }
-        taskAdapter adapter = new taskAdapter(employeeTasks);
+        taskAdapter adapter = new taskAdapter(MySingleton.getInstance(getContext()).employeeTasks);
         setListAdapter(adapter);
     }
 
