@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +12,14 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
-import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Customers;
-import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.EmployeeSchedule;
+import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Employees;
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Tasks;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -37,7 +31,7 @@ public class MainMenuFragment extends Fragment {
 
 
 
-    ImageButton confBtn,scheduleBtn,taskBtn,notesBtn;
+    ImageButton contactsButton,scheduleBtn,taskBtn,notesBtn;
 
 
     protected FragmentCommunicator cfl;
@@ -48,23 +42,23 @@ public class MainMenuFragment extends Fragment {
         View view = inflater.inflate(R.layout.main_menu, container, false);
         initializeViews(view);
 
-        confBtn.setOnClickListener(new View.OnClickListener() {
+        contactsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                try {
+                    boolean isEmployeesEmpty = new getAllEmployees().execute().get();
 
-//                try {
-//                   // String s =  new getScheduleByDate().execute().get();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                }
-//                Date cDate = new Date();
-//                String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
-//
-//                System.out.println(fDate);
-
-
+                    if(isEmployeesEmpty){
+                        Toast.makeText(getActivity(), "There are no employees available",Toast.LENGTH_LONG).show();
+                    } else {
+                        Log.i("MainFragment", "EmployeesFragment started");
+                        cfl.replaceFragment(new EmployeesFragment());
+                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -119,7 +113,7 @@ public class MainMenuFragment extends Fragment {
 
     private void initializeViews(View v) {
 
-        confBtn = (ImageButton) v.findViewById(R.id.confBtn);
+        contactsButton = (ImageButton) v.findViewById(R.id.confBtn);
         scheduleBtn = (ImageButton) v.findViewById(R.id.scheduleBtn);
         taskBtn = (ImageButton) v.findViewById(R.id.taskBtn);
         notesBtn = (ImageButton) v.findViewById(R.id.notesBtn);
@@ -225,12 +219,48 @@ public class MainMenuFragment extends Fragment {
             return s;
         }
 
+
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
         }
 
     }
+
+    private class getAllEmployees extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            String s = "";
+            boolean isEmpty = true;
+            try {
+
+                s = MySingleton.getInstance(getContext()).doGetPlainText("employees");
+                if(!s.equals("[]")){
+                    JSONArray jsonArray = new JSONArray(s);
+                    if(jsonArray.length() > 0){
+                        isEmpty = false;
+                    }
+                    System.out.println(jsonArray);
+
+                    for(int i =0; i<jsonArray.length(); i++){
+                        JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                        Gson gson = new Gson();
+                        Employees t;
+                        t = gson.fromJson(jsonObject.toString(), Employees.class);
+
+                        MySingleton.getInstance(getContext()).employees.offer(t);
+
+                    }
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return isEmpty;
+        }
+
+    }
+
 
 
 }

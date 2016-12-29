@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Base64;
 
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.EmployeeSchedule;
+import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Employees;
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Notes;
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Tasks;
 import org.json.JSONObject;
@@ -29,7 +30,8 @@ public class MySingleton {
     private static MySingleton mInstance;
     private Context applicationContext;
     private SSLContext sslContext;
-    private final String url = "https://192.168.1.99:8181/MainServerREST/api/";
+    //private final String url = "https://192.168.1.99:8181/MainServerREST/api/";
+    private final String url = "https://192.168.1.92:8181/MainServerREST/api/";
     private static char[] KEYSTORE_PASSWORD = "changeit".toCharArray();
     private SSLSocketFactory socketFactory;
     private  final String REST_SERVER_USERNAME = "EMPLOYEE";
@@ -38,6 +40,8 @@ public class MySingleton {
     public static LinkedList<EmployeeSchedule> employeeSchedule = new LinkedList<>();
     public static LinkedList<Tasks> employeeTasks = new LinkedList<>();
     public static LinkedList<Notes> employeeNotes = new LinkedList<>();
+    public static LinkedList<Employees> employees = new LinkedList<>();
+
 
 
     private String endoding;
@@ -178,7 +182,6 @@ public class MySingleton {
         con.setSSLSocketFactory(sslContext.getSocketFactory());
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization","Basic "+endoding);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
         con.setRequestProperty("Accept", "application/json");
         con.setRequestProperty("Content-Type", "application/json");
 
@@ -219,15 +222,6 @@ public class MySingleton {
         con.setSSLSocketFactory(sslContext.getSocketFactory());
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization","Basic "+endoding);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
-
-        // Send post request
-        con.setDoOutput(true);
-        con.setDoInput(true);
-        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.write(paramaeter.getBytes());
-        wr.flush();
-        wr.close();
 
         int responseCode = con.getResponseCode();
         System.out.println("\nSending 'POST' request to URL : " + url+methodAddress+paramaeter);
@@ -237,7 +231,7 @@ public class MySingleton {
         return String.valueOf(responseCode);
     }
 
-    public String sendPut(String methodAddress, String parameter) throws Exception {
+    public String sendPut(String methodAddress) throws Exception {
 
         String usernamePassword = REST_SERVER_USERNAME+":"+REST_SERVER_PASSWORD;
         endoding= android.util.Base64.encodeToString(usernamePassword.getBytes(), Base64.DEFAULT);
@@ -247,21 +241,21 @@ public class MySingleton {
         con.setSSLSocketFactory(sslContext.getSocketFactory());
         //add reuqest header
         con.setRequestMethod("PUT");
-        con.setRequestProperty("Authorization","Basic "+endoding);
-        con.setRequestProperty("Accept", "application/json");
-        con.setRequestProperty("Content-Type", "application/json");
+        //con.setRequestProperty("User-Agent", USER_AGENT);
+        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
+        String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
 
         // Send post request
         con.setDoOutput(true);
-        con.setDoInput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.write(parameter.getBytes());
+        wr.writeBytes(urlParameters);
         wr.flush();
         wr.close();
 
         int responseCode = con.getResponseCode();
-        System.out.println("\nSending 'PUT' request to URL : " + obj.toString());
+        System.out.println("\nSending 'PUT' request to URL : " + url);
+        System.out.println("Post parameters : " + urlParameters);
         System.out.println("Response Code : " + responseCode);
 
         BufferedReader in = new BufferedReader(
