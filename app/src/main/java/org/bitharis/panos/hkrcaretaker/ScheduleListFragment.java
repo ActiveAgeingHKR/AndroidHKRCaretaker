@@ -139,8 +139,7 @@ public class ScheduleListFragment extends ListFragment {
             adapter = new ScheduleAdapter(MySingleton.getInstance(getContext()).employeeSchedule);
         }
 
-        //THIS LINE MUST CHANGE I NEED ONE FOR EACH IF-ELSE
-//        ScheduleAdapter adapter = new ScheduleAdapter(MySingleton.getInstance(getContext()).employeeSchedule);
+
         setListAdapter(adapter);
         //enable the actionbar menu
         setHasOptionsMenu(true);
@@ -150,47 +149,6 @@ public class ScheduleListFragment extends ListFragment {
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         EmployeeSchedule es = ((ScheduleAdapter) getListAdapter()).getItem(position);
-
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                System.out.println("Action Settings is pushed");
-                return true;
-
-            case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                System.out.println("Action Favorite is pushed");
-                return true;
-            case R.id.search_item:
-                getActivity().onSearchRequested();
-                System.out.println("Search Button is pressed");
-                return true;
-
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
-
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu, menu);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        System.out.println("Creating the fragment");
-        cfl = (FragmentCommunicator) context;
     }
 
     class ScheduleAdapter extends ArrayAdapter<EmployeeSchedule> {
@@ -240,4 +198,53 @@ public class ScheduleListFragment extends ListFragment {
             return convertView;
         }
     }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        System.out.println("Creating the fragment");
+        cfl = (FragmentCommunicator) context;
+    }
+
+
+    /**
+     * FOr the ActionBar
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                // User chose the "Settings" item, show the app settings UI...
+                System.out.println("Action Settings is pushed");
+                return true;
+
+            case R.id.action_favorite:
+                // User chose the "Favorite" action, mark the current item
+                // as a favorite...
+                System.out.println("Action Favorite is pushed");
+                return true;
+            case R.id.search_item:
+                getActivity().onSearchRequested();
+                System.out.println("Search Button is pressed");
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu, menu);
+    }
+
+
+
+
 }

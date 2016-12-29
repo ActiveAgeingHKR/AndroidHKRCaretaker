@@ -37,7 +37,7 @@ public class MySingleton {
     public static String employeeID;
     public static LinkedList<EmployeeSchedule> employeeSchedule = new LinkedList<>();
     public static LinkedList<Tasks> employeeTasks = new LinkedList<>();
-    public static LinkedList<Notes> employeeNotes = new LinkedList<>();
+
 
 
     private String endoding;

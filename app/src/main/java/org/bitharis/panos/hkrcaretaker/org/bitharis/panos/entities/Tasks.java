@@ -21,7 +21,7 @@ public class Tasks implements Serializable {
 
     private String taskContent;
 
-    private Date taskdueDate;
+    private String taskdueDate;
 
     private boolean taskCompl;
 
@@ -65,11 +65,11 @@ public class Tasks implements Serializable {
         this.taskContent = taskContent;
     }
 
-    public Date getTaskdueDate() {
+    public String getTaskdueDate() {
         return taskdueDate;
     }
 
-    public void setTaskdueDate(Date taskdueDate) {
+    public void setTaskdueDate(String taskdueDate) {
         this.taskdueDate = taskdueDate;
     }
 

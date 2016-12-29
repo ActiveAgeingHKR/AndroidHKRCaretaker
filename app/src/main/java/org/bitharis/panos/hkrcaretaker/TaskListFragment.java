@@ -1,5 +1,6 @@
 package org.bitharis.panos.hkrcaretaker;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -19,6 +20,7 @@ import java.util.LinkedList;
  */
 
 public class TaskListFragment extends ListFragment {
+    private FragmentCommunicator cfl;
 
 
 
@@ -48,7 +50,7 @@ public class TaskListFragment extends ListFragment {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent){
+        public View getView(final int position, View convertView, ViewGroup parent){
             if(convertView == null){
                 convertView = getActivity().getLayoutInflater().inflate(R.layout.fragment_task_list,null);
             }
@@ -61,18 +63,40 @@ public class TaskListFragment extends ListFragment {
 
             TextView taskDueDate =
                     (TextView) convertView.findViewById(R.id.task_list_item_dueDateTextView);
-            taskDueDate.setText(task.getTaskdueDate().toString());
+            taskDueDate.setText(task.getTaskdueDate());
+
             Button detailsButton =(Button) convertView.findViewById(R.id.taskDetailsButton);
             detailsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    FragmentCommunicator fc = (FragmentCommunicator) getContext();
+
                     System.out.println("Button pressed");
                     // LOAD the new fragment
+                    FragmentCommunicator cfl = (FragmentCommunicator) getContext();
+                    LinkedList<Tasks> tasksLinkedList = MySingleton.getInstance(getContext()).employeeTasks;
+
+                    String taskTitle = tasksLinkedList.get(position).getTaskTitle();
+
+                    String dueDate = tasksLinkedList.get(position).getTaskdueDate();
+
+                    String taskDetails = tasksLinkedList.get(position).getTaskContent();
+
+                    //We declare what is the Fragment that will receive these information
+                    System.out.println("TESTING PARAMS Title:"+taskTitle+" \nDueDate:"+dueDate+" \nDetails"+taskDetails);
+                    String destFragment = "TaskDetailFragment";
+                    cfl.passStrings(destFragment, taskTitle, dueDate, taskDetails);
+                    cfl.replaceFragment(new TaskDetailFragment());
                 }
             });
 
             return convertView;
         }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        System.out.println("Creating the fragment");
+        cfl = (FragmentCommunicator) context;
     }
 }

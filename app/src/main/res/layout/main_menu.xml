@@ -33,7 +33,7 @@
             android:layout_height="match_parent"
             android:id="@+id/confBtn"
             android:layout_weight="1"
-            android:src="@drawable/confirm"
+            android:src="@drawable/call"
             android:scaleType="fitStart"
             android:layout_width="match_parent"
             android:background="?android:attr/colorPrimary" />
@@ -63,7 +63,7 @@
             android:layout_height="match_parent"
             android:id="@+id/notesBtn"
             android:layout_weight="1"
-            android:src="@drawable/notes"
+            android:src="@drawable/medrec"
             android:scaleType="fitStart"
             android:background="?android:attr/colorPrimary" />
     </LinearLayout>

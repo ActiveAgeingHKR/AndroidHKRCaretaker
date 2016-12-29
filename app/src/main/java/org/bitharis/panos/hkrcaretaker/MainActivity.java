@@ -96,14 +96,21 @@ public class MainActivity extends AppCompatActivity implements FragmentCommunica
             transaction.addToBackStack(null);
             transaction.commit();
         }else if(params[0].equalsIgnoreCase("ScheduleViewModeChooser")){
-            System.out.println("*************HELLO ********************************************");
-            System.out.println("Inside the method: "+params[0]+"   "+params[1]);
             ScheduleListFragment scheduleListFragment = new ScheduleListFragment();
             Bundle args = new Bundle();
             args.putString(ScheduleListFragment.MODES,params[1]);
             scheduleListFragment.setArguments(args);
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.frag_container,scheduleListFragment);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        } else if(params[0].equalsIgnoreCase("TaskDetailFragment")){
+            TaskDetailFragment taskDetailFragment = new TaskDetailFragment();
+            Bundle args = new Bundle();
+            args.putStringArray(TaskDetailFragment.FIELDS,params);
+            taskDetailFragment.setArguments(args);
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.frag_container,taskDetailFragment);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.commit();
         }
