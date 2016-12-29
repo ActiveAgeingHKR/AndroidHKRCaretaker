@@ -84,7 +84,7 @@ public class EmployeesFragment extends ListFragment {
                 @Override
                 public void onClick(View view) {
                     Employees employee = getItem(position);
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + employee.getEmpPhone()));
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + employee.getEmpPhone()));
                     startActivity(intent);
                 }
             });
