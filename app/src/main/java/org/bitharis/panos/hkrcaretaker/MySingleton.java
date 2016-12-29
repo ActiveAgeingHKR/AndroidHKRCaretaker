@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Base64;
 
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.EmployeeSchedule;
+import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Employees;
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Notes;
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Tasks;
 import org.json.JSONObject;
@@ -29,7 +30,8 @@ public class MySingleton {
     private static MySingleton mInstance;
     private Context applicationContext;
     private SSLContext sslContext;
-    private final String url = "https://192.168.1.99:8181/MainServerREST/api/";
+    //private final String url = "https://192.168.1.99:8181/MainServerREST/api/";
+    private final String url = "https://192.168.1.92:8181/MainServerREST/api/";
     private static char[] KEYSTORE_PASSWORD = "changeit".toCharArray();
     private SSLSocketFactory socketFactory;
     private  final String REST_SERVER_USERNAME = "EMPLOYEE";
@@ -37,6 +39,8 @@ public class MySingleton {
     public static String employeeID;
     public static LinkedList<EmployeeSchedule> employeeSchedule = new LinkedList<>();
     public static LinkedList<Tasks> employeeTasks = new LinkedList<>();
+    public static LinkedList<Notes> employeeNotes = new LinkedList<>();
+    public static LinkedList<Employees> employees = new LinkedList<>();
 
 
 

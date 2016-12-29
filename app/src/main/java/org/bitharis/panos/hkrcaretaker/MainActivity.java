@@ -63,6 +63,12 @@ public class MainActivity extends AppCompatActivity implements FragmentCommunica
                 ft.replace(R.id.frag_container, tlf);
                 ft.addToBackStack(null);
                 ft.commit();
+            }  else if (f instanceof EmployeesFragment) {
+                EmployeesFragment ef = (EmployeesFragment) f;
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.frag_container, ef);
+                ft.addToBackStack(null);
+                ft.commit();
             }
             else if (f instanceof ScheduleViewModeChooserDialog) {
                 System.out.println("Creating the ScheduleViewModeDialog Fragment");
