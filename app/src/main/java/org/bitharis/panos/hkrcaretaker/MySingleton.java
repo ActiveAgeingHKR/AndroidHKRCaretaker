@@ -37,7 +37,7 @@ public class MySingleton {
     public static String employeeID;
     public static LinkedList<EmployeeSchedule> employeeSchedule = new LinkedList<>();
     public static LinkedList<Tasks> employeeTasks = new LinkedList<>();
-
+    public static LinkedList<Notes> employeeNotes = new LinkedList<>();
 
 
     private String endoding;
@@ -178,6 +178,7 @@ public class MySingleton {
         con.setSSLSocketFactory(sslContext.getSocketFactory());
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization","Basic "+endoding);
+        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
         con.setRequestProperty("Accept", "application/json");
         con.setRequestProperty("Content-Type", "application/json");
 
@@ -218,6 +219,15 @@ public class MySingleton {
         con.setSSLSocketFactory(sslContext.getSocketFactory());
         con.setRequestMethod("POST");
         con.setRequestProperty("Authorization","Basic "+endoding);
+        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+
+        // Send post request
+        con.setDoOutput(true);
+        con.setDoInput(true);
+        DataOutputStream wr = new DataOutputStream(con.getOutputStream());
+        wr.write(paramaeter.getBytes());
+        wr.flush();
+        wr.close();
 
         int responseCode = con.getResponseCode();
         System.out.println("\nSending 'POST' request to URL : " + url+methodAddress+paramaeter);
@@ -227,7 +237,7 @@ public class MySingleton {
         return String.valueOf(responseCode);
     }
 
-    public String sendPut(String methodAddress) throws Exception {
+    public String sendPut(String methodAddress, String parameter) throws Exception {
 
         String usernamePassword = REST_SERVER_USERNAME+":"+REST_SERVER_PASSWORD;
         endoding= android.util.Base64.encodeToString(usernamePassword.getBytes(), Base64.DEFAULT);
@@ -237,21 +247,21 @@ public class MySingleton {
         con.setSSLSocketFactory(sslContext.getSocketFactory());
         //add reuqest header
         con.setRequestMethod("PUT");
-        //con.setRequestProperty("User-Agent", USER_AGENT);
-        con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+        con.setRequestProperty("Authorization","Basic "+endoding);
+        con.setRequestProperty("Accept", "application/json");
+        con.setRequestProperty("Content-Type", "application/json");
 
-        String urlParameters = "sn=C02G8416DRJM&cn=&locale=&caller=&num=12345";
 
         // Send post request
         con.setDoOutput(true);
+        con.setDoInput(true);
         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-        wr.writeBytes(urlParameters);
+        wr.write(parameter.getBytes());
         wr.flush();
         wr.close();
 
         int responseCode = con.getResponseCode();
-        System.out.println("\nSending 'PUT' request to URL : " + url);
-        System.out.println("Post parameters : " + urlParameters);
+        System.out.println("\nSending 'PUT' request to URL : " + obj.toString());
         System.out.println("Response Code : " + responseCode);
 
         BufferedReader in = new BufferedReader(

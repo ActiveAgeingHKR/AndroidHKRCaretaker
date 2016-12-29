@@ -34,9 +34,10 @@ public class Tasks implements Serializable {
         this.taskId = taskId;
     }
 
-    public Tasks(Integer taskId, String taskTitle, String taskContent, boolean taskCompl) {
+    public Tasks(Integer taskId, String taskTitle, String taskContent, String task_dueDate, boolean taskCompl) {
         this.taskId = taskId;
         this.taskTitle = taskTitle;
+        this.taskdueDate = task_dueDate;
         this.taskContent = taskContent;
         this.taskCompl = taskCompl;
     }

@@ -75,16 +75,23 @@ public class TaskListFragment extends ListFragment {
                     FragmentCommunicator cfl = (FragmentCommunicator) getContext();
                     LinkedList<Tasks> tasksLinkedList = MySingleton.getInstance(getContext()).employeeTasks;
 
+
+
                     String taskTitle = tasksLinkedList.get(position).getTaskTitle();
 
                     String dueDate = tasksLinkedList.get(position).getTaskdueDate();
 
                     String taskDetails = tasksLinkedList.get(position).getTaskContent();
 
+                    String taskID = tasksLinkedList.get(position).getTaskId().toString();
+                    System.out.println(taskID);
+
+
+
                     //We declare what is the Fragment that will receive these information
                     System.out.println("TESTING PARAMS Title:"+taskTitle+" \nDueDate:"+dueDate+" \nDetails"+taskDetails);
                     String destFragment = "TaskDetailFragment";
-                    cfl.passStrings(destFragment, taskTitle, dueDate, taskDetails);
+                    cfl.passStrings(destFragment, taskTitle, dueDate, taskDetails,taskID);
                     cfl.replaceFragment(new TaskDetailFragment());
                 }
             });

@@ -12,6 +12,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
+import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Tasks;
 import org.w3c.dom.Text;
 
 import java.util.Arrays;
@@ -28,6 +31,11 @@ public class TaskDetailFragment extends Fragment {
     private TextView task_title_textView, due_date_textView, task_details_txt;
     private Button reminder;
     private CheckBox completed;
+    private String taskID;
+    private String taskTitle;
+    private String taskContent;
+    private String taskDueDate;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceSate) {
@@ -47,6 +55,11 @@ public class TaskDetailFragment extends Fragment {
         task_title_textView.setText(params[1]);
         due_date_textView.setText(params[2]);
         task_details_txt.setText(params[3]);
+        taskID = params[4];
+        taskTitle = params[1];
+        taskDueDate = params[2];
+        taskContent = params[3];
+
 
         completed.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -60,7 +73,7 @@ public class TaskDetailFragment extends Fragment {
     }
 
     private void updateTaskStatus(boolean b){
-
+        new updateStaskStatusAsync().execute(b);
     }
 
 
@@ -78,6 +91,15 @@ public class TaskDetailFragment extends Fragment {
         protected Void doInBackground(Boolean... booleen) {
 
             boolean status = booleen[0].booleanValue();
+            Gson gson = new Gson();
+            Tasks task = new Tasks(Integer.parseInt(taskID),taskTitle,taskContent,taskDueDate,status);
+            String jsonString = gson.toJson(task);
+            System.out.println("JSON STRING "+jsonString);
+            try {
+                MySingleton.getInstance(getContext()).sendPut("tasks/1",jsonString);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return null;
         }
     }

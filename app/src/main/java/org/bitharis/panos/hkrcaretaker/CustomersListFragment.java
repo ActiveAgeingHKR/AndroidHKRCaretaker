@@ -15,7 +15,7 @@ import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Notes;
  * Created by panos on 12/21/2016.
  */
 
-public class NotesListFragment extends ListFragment {
+public class CustomersListFragment extends ListFragment {
 
 
     private LinkedList<Notes> employeesNotes;
@@ -23,12 +23,7 @@ public class NotesListFragment extends ListFragment {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
 
-        getActivity().setTitle("Your Notes");
 
-        employeesNotes = new LinkedList<>();
-        while(MySingleton.getInstance(getContext()).employeeNotes.size()>0){
-            this.employeesNotes.offer(MySingleton.getInstance(getContext()).employeeNotes.poll());
-        }
         NotesAdapter adapter = new NotesAdapter(employeesNotes);
         setListAdapter(adapter);
     }
