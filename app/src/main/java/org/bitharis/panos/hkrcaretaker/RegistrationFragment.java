@@ -44,19 +44,19 @@ public class RegistrationFragment extends Fragment {
                     params[1] = fname.getText().toString();
                     validityFlag++;
                 }else{
-                    Toast.makeText(getActivity(), "The field cannot be blank",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "The field 'Name' cant be blank or contain numbers",Toast.LENGTH_LONG).show();
                 }
                 if(fc.checkNameTypeStrings(lname.getText().toString())){
                     params[2] = lname.getText().toString();
                     validityFlag++;
                 }else{
-                    Toast.makeText(getActivity(), "The field cannot be blank",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "The field ' Last name'cant be blank or contain numbers",Toast.LENGTH_LONG).show();
                 }
                 if(fc.checkPhoneTypeStrings(phone.getText().toString())){
                     params[3] = phone.getText().toString();
                     validityFlag++;
                 }else{
-                    Toast.makeText(getActivity(), "The field cannot be blank",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Invalid form of phone number",Toast.LENGTH_LONG).show();
                 }
 
                 if(validityFlag==4){

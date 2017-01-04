@@ -34,7 +34,9 @@ public class ConfirmRegistrationFragment extends Fragment {
     private String sUsername;
     private String sEmail;
     private String sPass;
-    String[] params;
+    private String[] params;
+    private int fnameIndex = 3;
+    private int lnameIndex = 3;
 
     protected FragmentCommunicator cfl;
 
@@ -86,10 +88,17 @@ public class ConfirmRegistrationFragment extends Fragment {
                             try {
                                 //if the username or email already exists modify the username by adding one more leter from the name
                                 //Possible outOfArrayException here in case of a small first name
-                                sUsername = params[1].substring(0, 4) + params[1].substring(0, 3);
+                                if(++fnameIndex<=params[1].length()){
+                                    sUsername = params[1].substring(0, fnameIndex) + params[2].substring(0, 3);
+                                }else{
+                                    if(++lnameIndex <=params[2].length()){
+                                        sUsername = params[1].substring(0, fnameIndex) + params[2].substring(0, lnameIndex);
+                                    }
+                                }
+
                             }catch(Exception ex){
                                 //screw it, append a random number after the username.
-                                sUsername = params[1].substring(0, 3) + params[1].substring(0, 3)+number;
+                                sUsername = params[1].substring(0, 3) + params[2].substring(0, 3)+number;
                             }
                             sEmail = params[1] + "." + params[2] + number+"@hkr.caretaker.com";
                             uname.setText(sUsername);
@@ -103,6 +112,8 @@ public class ConfirmRegistrationFragment extends Fragment {
                     } catch (ExecutionException e) {
                         e.printStackTrace();
                     }
+                }else{
+                    Toast.makeText(getActivity(), "Password must have >=4 characters",Toast.LENGTH_LONG).show();
                 }
 
             }

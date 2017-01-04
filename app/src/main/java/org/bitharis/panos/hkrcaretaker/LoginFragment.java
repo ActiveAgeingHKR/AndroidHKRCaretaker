@@ -130,7 +130,7 @@ public class LoginFragment extends Fragment {
                     }else if(responseCode.equalsIgnoreCase("403")){
                         //The authentication was unsuccessful
                         System.out.println("Wrong Username or Password");
-                        Toast.makeText(getActivity(), "Wrong Username or Password",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Invalid username or password or this is an unregistered account.",Toast.LENGTH_LONG).show();
                     }else{
                         System.out.println("Unknown authentication error");
                     }
