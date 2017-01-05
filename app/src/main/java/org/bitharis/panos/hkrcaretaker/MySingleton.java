@@ -39,6 +39,7 @@ public class MySingleton {
     public static LinkedList<EmployeeSchedule> employeeSchedule = new LinkedList<>();
     public static LinkedList<Tasks> employeeTasks = new LinkedList<>();
     public static LinkedList<Employees> employees = new LinkedList<>();
+    public static final String PREF_LAST_TASK_ID = "lastTaskId";
 
 
     private String endoding;

@@ -141,8 +141,7 @@ public class ScheduleListFragment extends ListFragment {
 
 
         setListAdapter(adapter);
-        //enable the actionbar menu
-        setHasOptionsMenu(true);
+
 
     }
 
@@ -207,42 +206,9 @@ public class ScheduleListFragment extends ListFragment {
     }
 
 
-    /**
-     * FOr the ActionBar
-     * @param item
-     * @return
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // User chose the "Settings" item, show the app settings UI...
-                System.out.println("Action Settings is pushed");
-                return true;
 
-            case R.id.action_favorite:
-                // User chose the "Favorite" action, mark the current item
-                // as a favorite...
-                System.out.println("Action Favorite is pushed");
-                return true;
-            case R.id.search_item:
-                getActivity().onSearchRequested();
-                System.out.println("Search Button is pressed");
-                return true;
 
-            default:
-                // If we got here, the user's action was not recognized.
-                // Invoke the superclass to handle it.
-                return super.onOptionsItemSelected(item);
 
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu, menu);
-    }
 
 
 

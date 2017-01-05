@@ -24,9 +24,8 @@
             android:src="@drawable/schedule"
             android:scaleType="fitStart"
             android:layout_height="match_parent"
-            style="@style/Widget.AppCompat.Button"
             android:layout_width="match_parent"
-            android:background="?android:attr/colorPrimary" />
+            android:background="@color/colorPrimary"/>
 
         <ImageButton
             android:text="Confirm"
@@ -36,7 +35,7 @@
             android:src="@drawable/call"
             android:scaleType="fitStart"
             android:layout_width="match_parent"
-            android:background="?android:attr/colorPrimary" />
+            android:background="@color/colorPrimary"/>
     </LinearLayout>
 
     <LinearLayout
@@ -55,7 +54,7 @@
             android:src="@drawable/task_ico"
             android:scaleType="fitStart"
             android:layout_weight="1"
-            android:background="?android:attr/colorPrimary" />
+            android:background="@color/colorPrimary"/>
 
         <ImageButton
             android:text="Notes"
@@ -65,6 +64,6 @@
             android:layout_weight="1"
             android:src="@drawable/medrec"
             android:scaleType="fitStart"
-            android:background="?android:attr/colorPrimary" />
+            android:background="@color/colorPrimary"/>
     </LinearLayout>
 </LinearLayout>

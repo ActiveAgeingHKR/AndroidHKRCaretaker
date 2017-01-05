@@ -11,4 +11,8 @@
         <item>Daily View</item>
     </string-array>
     <string name="choose_schedule_view">Select View Mode</string>
+    <string name="new_task_title">New Tasks</string>
+    <string name="new_task_text">New tasks have been found</string>
+    <string name="severe_incident_title">New Incident</string>
+    <string name = "severe_incident_text">A severe incident has occured in a customer</string>
 </resources>

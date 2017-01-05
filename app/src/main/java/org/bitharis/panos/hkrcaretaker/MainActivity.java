@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements FragmentCommunica
         setContentView(R.layout.container);
 
 
+
         if (findViewById(R.id.frag_container) != null) {
 
             if (savedInstanceState != null) {

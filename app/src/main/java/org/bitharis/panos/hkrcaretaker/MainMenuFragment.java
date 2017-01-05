@@ -3,6 +3,7 @@ package org.bitharis.panos.hkrcaretaker;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,13 +29,18 @@ import java.util.concurrent.ExecutionException;
 
 public class MainMenuFragment extends Fragment {
 
-
-
-
     ImageButton contactsButton,scheduleBtn,taskBtn,notesBtn;
 
 
     protected FragmentCommunicator cfl;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+
+        //Startying the service
+        TaskFinderService.setServiceAlarm(getContext(),true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceSate) {
@@ -109,6 +115,21 @@ public class MainMenuFragment extends Fragment {
 
     }
 
+    //This method is used by the TaskFinderService to get the latest tasks
+    public String getLastTaskId(String taskId){
+        checkUpdatedTasks cut = new checkUpdatedTasks();
+        String result = null;
+        try {
+            result = cut.execute(taskId).get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 
 
     private void initializeViews(View v) {
@@ -118,33 +139,6 @@ public class MainMenuFragment extends Fragment {
         taskBtn = (ImageButton) v.findViewById(R.id.taskBtn);
         notesBtn = (ImageButton) v.findViewById(R.id.notesBtn);
     }
-
-    private class getScheduleByDate extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... voids) {
-            String s="";
-            try {
-
-
-                Date cDate = new Date();
-                String fDate = new SimpleDateFormat("yyyy-MM-dd").format(cDate);
-//
-                s = MySingleton.getInstance(getContext()).doGetJsonString("employeeschedule/date/"+fDate);
-                System.out.println("response "+s);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return s;
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-        }
-
-    }
-
 
 
     private class getTaskByEmpId extends AsyncTask<Void, Void, Boolean> {
@@ -168,7 +162,15 @@ public class MainMenuFragment extends Fragment {
                             Tasks t;
                             t = gson.fromJson(jsonObject.toString(),Tasks.class);
                             MySingleton.getInstance(getContext()).employeeTasks.offer(t);
+
+                            //save the last taskId to a sharedpref file.
+                            if(i==jsonArray.length()-1){
+
+                                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putString
+                                        (MySingleton.getInstance(getContext()).PREF_LAST_TASK_ID,t.getTaskId().toString()).commit();
+                            }
                         }
+
                     }
                     s = Boolean.TRUE;
 
@@ -185,6 +187,12 @@ public class MainMenuFragment extends Fragment {
                             t = gson.fromJson(jsonObject.toString(),Tasks.class);
 
                             MySingleton.getInstance(getContext()).employeeTasks.offer(t);
+
+                            if(i==jsonArray.length()-1){
+
+                                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putString
+                                        (MySingleton.getInstance(getContext()).PREF_LAST_TASK_ID,t.getTaskId().toString()).commit();
+                            }
                         }
                     }
                     s = Boolean.TRUE;
@@ -199,29 +207,6 @@ public class MainMenuFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Boolean result) {
-            super.onPostExecute(result);
-        }
-
-    }
-
-    private class getNotesByCustId extends AsyncTask<Void, Void, String> {
-        @Override
-        protected String doInBackground(Void... voids) {
-            String s="";
-            try {
-
-                s = MySingleton.getInstance(getContext()).doGetPlainText("notes/findtaskbyempid/"+MySingleton.getInstance(getContext()).employeeID);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return s;
-        }
-
-
-        @Override
-        protected void onPostExecute(String result) {
             super.onPostExecute(result);
         }
 
@@ -257,6 +242,29 @@ public class MainMenuFragment extends Fragment {
                 e.printStackTrace();
             }
             return isEmpty;
+        }
+
+    }
+
+    private class checkUpdatedTasks extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            String s="";
+            String taskId = params[0];
+            try {
+                s = MySingleton.getInstance(getContext()).doGetJsonString("tasks/getupdatedtasklist/"+MySingleton.getInstance(getContext()).employeeID+"&"+taskId);
+                System.out.println(s);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            return s;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
         }
 
     }

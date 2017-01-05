@@ -1,12 +1,17 @@
 package org.bitharis.panos.hkrcaretaker;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -33,6 +38,12 @@ public class TaskListFragment extends ListFragment {
 
         taskAdapter adapter = new taskAdapter(MySingleton.getInstance(getContext()).employeeTasks);
         setListAdapter(adapter);
+
+//        TaskFinderService.setServiceAlarm(getContext(),true);
+        //enable the actionbar menu
+        setHasOptionsMenu(true);
+
+
     }
 
     @Override
@@ -105,5 +116,47 @@ public class TaskListFragment extends ListFragment {
         super.onAttach(context);
         System.out.println("Creating the fragment");
         cfl = (FragmentCommunicator) context;
+    }
+
+    /**
+     * FOr the ActionBar
+     * @param item
+     * @return
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.task_fetcher_diable:
+                boolean shouldStartTFinder = !TaskFinderService.isServiceAlarmOn(getActivity());
+                TaskFinderService.setServiceAlarm(getActivity(),shouldStartTFinder);
+
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)
+                    getActivity().invalidateOptionsMenu();
+
+                return true;
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu){
+        super.onPrepareOptionsMenu(menu);
+
+        MenuItem tootleItem = menu.findItem(R.id.task_fetcher_diable);
+        if(TaskFinderService.isServiceAlarmOn(getActivity())){
+            tootleItem.setTitle("Stop");
+        }else{
+            tootleItem.setTitle("Start");
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu, menu);
     }
 }

@@ -1,10 +1,15 @@
 package org.bitharis.panos.hkrcaretaker;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -14,6 +19,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 
+import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Employees;
 import org.bitharis.panos.hkrcaretaker.org.bitharis.panos.entities.Tasks;
 import org.w3c.dom.Text;
 
@@ -38,9 +44,20 @@ public class TaskDetailFragment extends Fragment {
 
 
     @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        getActivity().setTitle("Task Details");
+
+
+    }
+
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceSate) {
         View view = inflater.inflate(R.layout.task_detail, container, false);
         //String in index [0] contains the Fragment of origin. It should never be used to fill the forms
+
+
 
         params = getArguments().getStringArray(FIELDS);
 
@@ -65,6 +82,20 @@ public class TaskDetailFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 updateTaskStatus(b);
+            }
+        });
+
+        reminder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setType("vnd.android.cursor.item/event");
+                intent.putExtra("beginTime", "09:00");
+                intent.putExtra("allDay", false);
+                intent.putExtra("endTime", "17:00");
+                intent.putExtra("title", taskTitle);
+                startActivity(intent);
             }
         });
 
@@ -103,4 +134,8 @@ public class TaskDetailFragment extends Fragment {
             return null;
         }
     }
+
+
+
+
 }
